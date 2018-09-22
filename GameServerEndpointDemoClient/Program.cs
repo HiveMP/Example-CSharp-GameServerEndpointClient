@@ -1,4 +1,5 @@
-﻿using HiveMP.Lobby.Api;
+﻿using HiveMP.GameServer.Api;
+using HiveMP.Lobby.Api;
 using HiveMP.UserSession.Api;
 using Newtonsoft.Json;
 using System;
@@ -60,6 +61,7 @@ namespace GameServerEndpointDemoClient
             });
 
             Console.WriteLine("Hitting Google Cloud Functions endpoint...");
+            string gameServerId;
             using (var client = new HttpClient())
             {
                 var response = await client.PutAsync(
@@ -79,8 +81,28 @@ namespace GameServerEndpointDemoClient
 
                 response.EnsureSuccessStatusCode();
                 var result = JsonConvert.DeserializeObject<GameServerResponse>(await response.Content.ReadAsStringAsync());
+                gameServerId = result.GameServerId;
+            }
+            
+            Console.WriteLine("Game server is being provisioned: " + gameServerId);
 
-                Console.WriteLine("Game server is being provisioned: " + result.GameServerId);
+            var gameServerClient = new GameServerClient(session.AuthenticatedSession.ApiKey);
+            GameServerPublic gameServerInfo;
+            do
+            {
+                await Task.Delay(2000);
+                gameServerInfo = await gameServerClient.ServerPublicGETAsync(new ServerPublicGETRequest
+                {
+                    Id = gameServerId
+                });
+
+                Console.WriteLine("Game server status is: " + gameServerInfo.Status);
+            } while (gameServerInfo.Status == "provisioning");
+
+            Console.WriteLine("Connect to the game server on:");
+            foreach (var port in gameServerInfo.ServerPorts)
+            {
+                Console.WriteLine(" - " + gameServerInfo.ServerIpAddress + ":" + port.PublicPort);
             }
         }
 

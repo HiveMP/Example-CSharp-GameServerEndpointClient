@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HiveMP" Version="2.0.36" />
+    <PackageReference Include="HiveMP" Version="2.0.43" />
     <PackageReference Include="ReadLine" Version="2.0.1" />
   </ItemGroup>
 
