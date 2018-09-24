@@ -2,8 +2,6 @@
 
 This is an example program written in C# that shows you how to use HiveMP Game Servers with Google Cloud Functions to coordinate on-demand game server provisioning.
 
-_**This example is a work-in-progress! The associated documentation has not yet published.**_
-
 ## Overview
 
 Refer to the **How-To Guide**: [Provisioning game servers](https://hivemp.com/docs/game-server/how-to/provisioning-game-servers/#manually-via-the-api) for information on how to use this example.
